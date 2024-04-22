@@ -27,6 +27,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
   //funktion för att lägga till arbetserfarenhet till databasen
 function addWorkExperience(workExperienceData) {
+
+  //kollar så att fälten är ifyllda
+  for (const key in workExperienceData) {
+    if (!workExperienceData[key]) {
+      alert('Fyll i alla fält!');
+      return;
+    }
+  }
+
   fetch('http://localhost:3300/cv/workexp', {
     method: 'POST',
     headers: {
@@ -42,29 +51,75 @@ function addWorkExperience(workExperienceData) {
   })
   .then(data => {
     console.log('Work experience added:', data);
+
+    alert('Data tillagd!');
+    resetFormFields();
   })
   .catch(error => {
     console.error('Error adding work experience:', error);
   });
 }
 
-// eventlistener tillagt till formuläret
+function resetFormFields() {
+  document.getElementById("workExperienceForm").reset();
+}
+
+// Funktion för att validera formuläret och visa felmeddelanden
+function validateFormAndDisplayErrors(formData) {
+  // Objekt för att hålla reda på felmeddelanden
+  const errors = {};
+
+  // Validera varje fält
+  if (!formData.companyname) {
+    errors.companyname = "Fyll i företagets namn";
+  }
+  if (!formData.jobtitle) {
+    errors.jobtitle = "Fyll i jobbtiteln";
+  }
+  if (!formData.location) {
+    errors.location = "Fyll i platsen";
+  }
+  if (!formData.startdate) {
+    errors.startdate = "Fyll i startdatum";
+  }
+  if (!formData.enddate) {
+    errors.enddate = "Fyll i slutdatum";
+  }
+  if (!formData.description) {
+    errors.description = "Fyll i beskrivningen";
+  }
+
+  // Visa felmeddelanden på skärmen
+  for (const key in errors) {
+    const errorMessage = errors[key];
+    document.getElementById(`${key}Error`).textContent = errorMessage;
+  }
+
+  // Returnera true om det inte finns några fel, annars false
+  return Object.keys(errors).length === 0;
+}
+
+//eventlistener till formuläret
 document.getElementById('workExperienceForm').addEventListener('submit', function(event) {
-    event.preventDefault(); 
+  event.preventDefault();
 
-    //inhämta formulärdata
-    const formData = {
-        companyname: document.getElementById('companyname').value,
-        jobtitle: document.getElementById('jobtitle').value,
-        location: document.getElementById('location').value,
-        startdate: document.getElementById('startdate').value,
-        enddate: document.getElementById('enddate').value,
-        description: document.getElementById('description').value
-    };
+  //inhämtar formulärdata
+  const formData = {
+    companyname: document.getElementById('companyname').value,
+    jobtitle: document.getElementById('jobtitle').value,
+    location: document.getElementById('location').value,
+    startdate: document.getElementById('startdate').value,
+    enddate: document.getElementById('enddate').value,
+    description: document.getElementById('description').value
+  };
 
-    console.log('Form data:', formData); 
+  //validera formulärdata och visa felmeddelanden
+  if (validateFormAndDisplayErrors(formData)) {
+    //lägg till data om fälten är ifyllda
     addWorkExperience(formData);
+  }
 });
+
 
   //Raderar data 
 function deleteWorkExperience(workExperienceId) {

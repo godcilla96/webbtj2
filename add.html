@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel = "stylesheet" href ="style.css">
-    <script src = "script.js"></script>
+
     <title>Webbtjänser</title>
 </head>
 <body>
@@ -20,28 +20,34 @@
     <p>Här kan du lägga till information till ditt CV.</p>
     <form id="workExperienceForm">
         <label for="companyname">Företagets namn:</label><br>
-        <input type="text" id="companyname" name="companyname"><br><br>
-
+        <input type="text" id="companyname" name="companyname">
+        <span id="companynameError" class="error"></span><br><br>
+    
         <label for="jobtitle">Jobbtitel:</label><br>
-        <input type="text" id="jobtitle" name="jobtitle"><br><br>
-
+        <input type="text" id="jobtitle" name="jobtitle">
+        <span id="jobtitleError" class="error"></span><br><br>
+    
         <label for="location">Plats:</label><br>
-        <input type="text" id="location" name="location"><br><br>
-
+        <input type="text" id="location" name="location">
+        <span id="locationError" class="error"></span><br><br>
+    
         <label for="startdate">Startdatum:</label><br>
-        <input type="date" id="startdate" name="startdate"><br><br>
-
+        <input type="date" id="startdate" name="startdate">
+        <span id="startdateError" class="error"></span><br><br>
+    
         <label for="enddate">Slutdatum:</label><br>
-        <input type="date" id="enddate" name="enddate"><br><br>
-
+        <input type="date" id="enddate" name="enddate">
+        <span id="enddateError" class="error"></span><br><br>
+    
         <label for="description">Beskrivning:</label><br>
-        <textarea id="description" name="description"></textarea><br><br>
-
+        <textarea id="description" name="description"></textarea>
+        <span id="descriptionError" class="error"></span><br><br>
+    
         <input type="submit" value="Submit">
-    </form>
-    </div>
+      </form>
 </body>
 <footer>
     Cecilia Lindström, celi2302@student.miun.se 2024
 </footer>
+<script src = "script.js"></script>
 </html>
