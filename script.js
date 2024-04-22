@@ -1,4 +1,6 @@
 const url = "http://localhost:3300/cv/workexperience";
+
+//skapar raderaknapp
 function createDeleteButton(workExperienceId) {
   const deleteButton = document.createElement('button');
   deleteButton.textContent = 'Radera';
@@ -8,7 +10,7 @@ function createDeleteButton(workExperienceId) {
   return deleteButton;
 }
 
-// Funktion för att skapa en knapp för att ändra en post
+//skapar ändraknapp
 function createEditButton(workExperienceId, formData) {
   const editButton = document.createElement('button');
   editButton.textContent = 'Ändra';
@@ -23,7 +25,9 @@ function createEditButton(workExperienceId, formData) {
 
 // Kod för att inhämta databas och ladda det på sidan
 document.addEventListener('DOMContentLoaded', function() {
-  fetch(url)
+  fetch(url, {
+    method: 'GET'
+  })
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -51,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
       console.error('There was a problem with the fetch operation:', error);
     });
 });
-
   //funktion för att lägga till arbetserfarenhet till databasen
 function addWorkExperience(workExperienceData) {
 
@@ -172,3 +175,160 @@ function deleteWorkExperience(workExperienceId) {
     });
   }
 }
+/*
+//funktion som var tänkt att finnas till för att kunna göra ändringar i den lagrade databasen men som jag inte fick att fungera helt
+function openEditModal(postId) {
+  //hämta information om posten från servern baserat på postId
+  fetch(`http://localhost:3300/cv/workexperience/${workExperienceId}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch work experience details');
+      }
+      return response.json();
+    })
+    .then(data => {
+      //fyll formuläret med den befintliga informationen för posten
+      document.getElementById('companyname').value = data.companyname;
+      document.getElementById('jobtitle').value = data.jobtitle;
+      document.getElementById('location').value = data.location;
+      document.getElementById('startdate').value = data.startdate;
+      document.getElementById('enddate').value = data.enddate;
+      document.getElementById('description').value = data.description;
+
+      // Uppdatera knappens dataset för att lagra postId
+      document.getElementById('saveChangesButton').dataset.workExperienceId =  workExperienceId;
+
+      // Skapa knappen om den inte redan finns
+      if (!document.getElementById('saveChangesButton')) {
+        const saveChangesButton = document.createElement('button');
+        saveChangesButton.id = 'saveChangesButton';
+        saveChangesButton.textContent = 'Spara ändringar';
+        
+        // Lägg till eventlyssnare för knappen
+        saveChangesButton.addEventListener('click', function() {
+          const updatedData = {
+            companyname: document.getElementById('companyname').value,
+            jobtitle: document.getElementById('jobtitle').value,
+            location: document.getElementById('location').value,
+            startdate: document.getElementById('startdate').value,
+            enddate: document.getElementById('enddate').value,
+            description: document.getElementById('description').value
+          };
+          const postId = document.getElementById('saveChangesButton').dataset.workExperienceId;
+          // Skicka PUT-begäran med uppdaterad information till servern
+          updateWorkExperience(postId, updatedData);
+        });
+
+        // Lägg till knappen i formuläret
+        document.getElementById('formContainer').appendChild(saveChangesButton);
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching work experience details:', error);
+    });
+}
+
+// Funktion för att skicka PUT-begäran med uppdaterad information
+function updateWorkExperience(workExperienceId, updatedData) {
+  fetch(`http://localhost:3300/cv/workexp/${workExperienceId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updatedData),
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Failed to update work experience');
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Work experience updated:', data);
+    // Uppdatera gränssnittet efter att ändringen är klar
+  })
+  .catch(error => {
+    console.error('Error updating work experience:', error);
+  });
+}
+
+
+function createEditButton(workExperienceId, formData) {
+  const editButton = document.createElement('button');
+  editButton.textContent = 'Ändra';
+  editButton.addEventListener('click', function() {
+    // Visa ett modalfönster för redigering med förifyllda värden från formData
+    showModalForEditing(workExperienceId, formData);
+  });
+  return editButton;
+}
+
+function showModalForEditing(workExperienceId, formData) {
+  // Skapa ett modalfönster
+  const modal = document.createElement('div');
+  modal.classList.add('modal');
+
+  // Skapa innehållet i modalfönstret
+  const modalContent = document.createElement('div');
+  modalContent.classList.add('modal-content');
+
+  // Skapa en rubrik för modalfönstret
+  const modalHeader = document.createElement('h2');
+  modalHeader.textContent = 'Redigera post';
+
+  // Skapa ett formulär för redigering
+  const editForm = document.createElement('form');
+
+  // Lägg till formulärfält för varje attribut i formData
+  for (const key in formData) {
+    const label = document.createElement('label');
+    label.textContent = key.charAt(0).toUpperCase() + key.slice(1); // Första bokstaven i nyckeln stor
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = formData[key];
+    input.name = key; // Använd attributets namn som namnet på input-fältet
+    label.appendChild(input);
+    editForm.appendChild(label);
+  }
+
+  // Skapa en knapp för att spara ändringar
+  const saveButton = document.createElement('button');
+  saveButton.textContent = 'Spara ändringar';
+  saveButton.addEventListener('click', function() {
+    // Implementera logik för att spara ändringar till databasen
+    saveChangesToDatabase(workExperienceId, editForm);
+    // Stäng modalfönstret efter att ändringarna är sparade
+    closeModal(modal);
+  });
+
+  // Lägg till rubrik, formulär och spara-knapp till modalfönstret
+  modalContent.appendChild(modalHeader);
+  modalContent.appendChild(editForm);
+  modalContent.appendChild(saveButton);
+  modal.appendChild(modalContent);
+
+  // Lägg till modalfönstret till body-elementet
+  document.body.appendChild(modal) ;
+}
+
+function saveChangesToDatabase(workExperienceId, editForm) {
+  // Implementera logik för att skicka uppdaterad data till servern och uppdatera posten med workExperienceId
+  // Hämta uppdaterad information från formuläret
+  const updatedData = {};
+  const formData = new FormData(editForm);
+  for (const [key, value] of formData.entries()) {
+    updatedData[key] = value;
+  }
+  // Skicka PUT-begäran med uppdaterad information till servern
+  updateWorkExperience(workExperienceId, updatedData);
+}
+
+function updateWorkExperience(postId, updatedData) {
+  // Implementera logik för att skicka PUT-begäran till servern med uppdaterad information
+  // fetch(...);
+}
+
+function closeModal(modal) {
+  // Stäng modalfönstret genom att ta bort det från DOM-trädet
+  modal.remove();
+}*/
