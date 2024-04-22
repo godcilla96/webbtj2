@@ -15,8 +15,29 @@
         </ul>
     </nav>
     <div class = "main">
-    <h1>Lägg till post här</h1>
-    <p>Här ska det finnas ett formulär för att lägga till information till databasen</p>
+    <h1>Lägg till arbetserfarenhet här</h1>
+    <p>Här kan du lägga till information till ditt CV.</p>
+    <form id="workExperienceForm">
+        <label for="companyname">Företagets namn:</label><br>
+        <input type="text" id="companyname" name="companyname"><br><br>
+
+        <label for="jobtitle">Jobbtitel:</label><br>
+        <input type="text" id="jobtitle" name="jobtitle"><br><br>
+
+        <label for="location">Plats:</label><br>
+        <input type="text" id="location" name="location"><br><br>
+
+        <label for="startdate">Startdatum:</label><br>
+        <input type="date" id="startdate" name="startdate"><br><br>
+
+        <label for="enddate">Slutdatum:</label><br>
+        <input type="date" id="enddate" name="enddate"><br><br>
+
+        <label for="description">Beskrivning:</label><br>
+        <textarea id="description" name="description"></textarea><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
     </div>
 </body>
 <footer>
