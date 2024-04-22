@@ -1,6 +1,27 @@
 const url = "http://localhost:3300/cv/workexperience";
+function createDeleteButton(workExperienceId) {
+  const deleteButton = document.createElement('button');
+  deleteButton.textContent = 'Radera';
+  deleteButton.addEventListener('click', function() {
+    deleteWorkExperience(workExperienceId);
+  });
+  return deleteButton;
+}
 
-//kod för att inhämta databas och ladda det på sidan
+// Funktion för att skapa en knapp för att ändra en post
+function createEditButton(workExperienceId, formData) {
+  const editButton = document.createElement('button');
+  editButton.textContent = 'Ändra';
+  editButton.addEventListener('click', function() {
+    // Här kan du implementera logik för att ändra posten med ID workExperienceId
+    // Exempelvis, visa ett formulär för att redigera posten med förifyllda värden från formData
+    console.log('Redigera post med ID:', workExperienceId);
+    console.log('Formulärdata:', formData);
+  });
+  return editButton;
+}
+
+// Kod för att inhämta databas och ladda det på sidan
 document.addEventListener('DOMContentLoaded', function() {
   fetch(url)
     .then(response => {
@@ -10,13 +31,19 @@ document.addEventListener('DOMContentLoaded', function() {
       return response.json();
     })
     .then(data => {
-      
       console.log(data);
-      //presentera datan i en lista
+      // Presentera datan i en lista
       const postList = document.getElementById('postList');
       data.forEach(post => {
         const listItem = document.createElement('li');
         listItem.textContent = `${post.companyname} - ${post.jobtitle}, ${post.startdate}, ${post.enddate}: ${post.description}`;
+        
+        // Skapa radera och ändra knappar för varje post
+        const deleteButton = createDeleteButton(post.id);
+        const editButton = createEditButton(post.id, post);
+        listItem.appendChild(deleteButton);
+        listItem.appendChild(editButton);
+        
         postList.appendChild(listItem);
       });
     })
@@ -120,27 +147,28 @@ document.getElementById('workExperienceForm').addEventListener('submit', functio
   }
 });
 
-
-  //Raderar data 
+//funktion för att radera arbetserfarenhet från databasen med DELETE-operatorn
 function deleteWorkExperience(workExperienceId) {
-  fetch(`http://localhost:3300/cv/workexp/${workExperienceId}`, {
-    method: 'DELETE',
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Failed to delete work experience');
-    }
-    return response.json();
-  })
-  .then(data => {
-    console.log('Work experience deleted:', data.message);
-
-  })
-  .catch(error => {
-    console.error('Error deleting work experience:', error);
-  });
+  //visa en bekräftelsepopup innan radering
+  const confirmation = confirm("Är du säker på att du vill radera posten?");
+  
+  if (confirmation) {
+    fetch(`http://localhost:3300/cv/workexp/${workExperienceId}`, {
+      method: 'DELETE',
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to delete work experience');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Work experience deleted:', data.message);
+      //laddar om sidan efter radering
+      location.reload();
+    })
+    .catch(error => {
+      console.error('Error deleting work experience:', error);
+    });
+  }
 }
-/*
-// Exempel:
-const workExperienceIdToDelete = 1; 
-deleteWorkExperience(workExperienceIdToDelete);*/
