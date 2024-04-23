@@ -175,7 +175,11 @@ function deleteWorkExperience(workExperienceId) {
     });
   }
 }
-/*
+
+
+
+/* IGNORERA v
+
 //funktion som var tänkt att finnas till för att kunna göra ändringar i den lagrade databasen men som jag inte fick att fungera helt
 function openEditModal(postId) {
   //hämta information om posten från servern baserat på postId
@@ -195,16 +199,16 @@ function openEditModal(postId) {
       document.getElementById('enddate').value = data.enddate;
       document.getElementById('description').value = data.description;
 
-      // Uppdatera knappens dataset för att lagra postId
+      //uppdatera knappens dataset för att lagra postId
       document.getElementById('saveChangesButton').dataset.workExperienceId =  workExperienceId;
 
-      // Skapa knappen om den inte redan finns
+      //skapa knappen om den inte redan finns
       if (!document.getElementById('saveChangesButton')) {
         const saveChangesButton = document.createElement('button');
         saveChangesButton.id = 'saveChangesButton';
         saveChangesButton.textContent = 'Spara ändringar';
         
-        // Lägg till eventlyssnare för knappen
+        //lägg till eventlyssnare för knappen
         saveChangesButton.addEventListener('click', function() {
           const updatedData = {
             companyname: document.getElementById('companyname').value,
@@ -219,7 +223,7 @@ function openEditModal(postId) {
           updateWorkExperience(postId, updatedData);
         });
 
-        // Lägg till knappen i formuläret
+        //lägg till knappen i formuläret
         document.getElementById('formContainer').appendChild(saveChangesButton);
       }
     })
@@ -228,7 +232,7 @@ function openEditModal(postId) {
     });
 }
 
-// Funktion för att skicka PUT-begäran med uppdaterad information
+//funktion för att skicka PUT-begäran med uppdaterad information
 function updateWorkExperience(workExperienceId, updatedData) {
   fetch(`http://localhost:3300/cv/workexp/${workExperienceId}`, {
     method: 'PUT',
@@ -264,22 +268,22 @@ function createEditButton(workExperienceId, formData) {
 }
 
 function showModalForEditing(workExperienceId, formData) {
-  // Skapa ett modalfönster
+  //skapa ett modalfönster
   const modal = document.createElement('div');
   modal.classList.add('modal');
 
-  // Skapa innehållet i modalfönstret
+  //skapa innehållet i modalfönstret
   const modalContent = document.createElement('div');
   modalContent.classList.add('modal-content');
 
-  // Skapa en rubrik för modalfönstret
+  //skapa en rubrik för modalfönstret
   const modalHeader = document.createElement('h2');
   modalHeader.textContent = 'Redigera post';
 
-  // Skapa ett formulär för redigering
+  //skapa ett formulär för redigering
   const editForm = document.createElement('form');
 
-  // Lägg till formulärfält för varje attribut i formData
+  //lägg till formulärfält för varje attribut i formData
   for (const key in formData) {
     const label = document.createElement('label');
     label.textContent = key.charAt(0).toUpperCase() + key.slice(1); // Första bokstaven i nyckeln stor
@@ -291,44 +295,44 @@ function showModalForEditing(workExperienceId, formData) {
     editForm.appendChild(label);
   }
 
-  // Skapa en knapp för att spara ändringar
+  //skapa en knapp för att spara ändringar
   const saveButton = document.createElement('button');
   saveButton.textContent = 'Spara ändringar';
   saveButton.addEventListener('click', function() {
-    // Implementera logik för att spara ändringar till databasen
+    //implementera logik för att spara ändringar till databasen
     saveChangesToDatabase(workExperienceId, editForm);
-    // Stäng modalfönstret efter att ändringarna är sparade
+    //stäng modalfönstret efter att ändringarna är sparade
     closeModal(modal);
   });
 
-  // Lägg till rubrik, formulär och spara-knapp till modalfönstret
+  //lägg till rubrik, formulär och spara-knapp till modalfönstret
   modalContent.appendChild(modalHeader);
   modalContent.appendChild(editForm);
   modalContent.appendChild(saveButton);
   modal.appendChild(modalContent);
 
-  // Lägg till modalfönstret till body-elementet
+  //lägg till modalfönstret till body-elementet
   document.body.appendChild(modal) ;
 }
 
 function saveChangesToDatabase(workExperienceId, editForm) {
-  // Implementera logik för att skicka uppdaterad data till servern och uppdatera posten med workExperienceId
-  // Hämta uppdaterad information från formuläret
+  //implementera logik för att skicka uppdaterad data till servern och uppdatera posten med workExperienceId
+  //hämta uppdaterad information från formuläret
   const updatedData = {};
   const formData = new FormData(editForm);
   for (const [key, value] of formData.entries()) {
     updatedData[key] = value;
   }
-  // Skicka PUT-begäran med uppdaterad information till servern
+  //skicka PUT-begäran med uppdaterad information till servern
   updateWorkExperience(workExperienceId, updatedData);
 }
 
 function updateWorkExperience(postId, updatedData) {
-  // Implementera logik för att skicka PUT-begäran till servern med uppdaterad information
+  //implementera logik för att skicka PUT-begäran till servern med uppdaterad information
   // fetch(...);
 }
 
 function closeModal(modal) {
-  // Stäng modalfönstret genom att ta bort det från DOM-trädet
+  //stäng modalfönstret genom att ta bort det från DOM-trädet
   modal.remove();
 }*/

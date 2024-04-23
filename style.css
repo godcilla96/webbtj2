@@ -37,7 +37,7 @@ nav a {
     font-weight: bold;
     font-size: 1.2em;
     text-transform: uppercase;
-    margin: 0 15px 0 15px;
+    margin: 0 10px 0 10px;
     padding: 30px;
     line-height: 30px;
 }
@@ -68,4 +68,18 @@ footer {
 
 button {
     margin-left: 10px;
+}
+
+.slutsatser {
+    line-height: 2em;
+    max-width: 70ch;
+    margin: 0 auto;
+    margin-bottom: 25px;
+}
+
+@media only screen and (min-width: 1300px) {
+    .main {
+        margin-left: 350px;
+        margin-right: 350px;
+    }
 }
