@@ -1,4 +1,6 @@
 const url = "http://localhost:3300/cv/workexperience";
+const cors = require("cors"); 
+app.use(cors());
 
 //skapar raderaknapp
 function createDeleteButton(workExperienceId) {
